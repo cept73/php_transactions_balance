@@ -4,9 +4,9 @@ use App\Controllers\MainController;
 use App\Core;
 
 /** Debug */
-ini_set('display_errors', true);
+/* ini_set('display_errors', true);
 ini_set('display_startup_errors', true);
-error_reporting(E_ALL);
+error_reporting(E_ALL); */
 
 require('../vendor/autoload.php');
 
