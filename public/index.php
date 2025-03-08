@@ -14,9 +14,7 @@ try {
     (new Core\App())
         ->connectDb('sqlite:../data/database.sqlite')
         ->addRoute(Core\Request::METHOD_GET, '/', MainController::class, 'index')
-        ->addRoute(Core\Request::METHOD_POST, '/', MainController::class, 'getTransactions')
-        // TODO: Need to tune up server-side pretty-urls first. Removed for simplicity.
-        // ->addRoute(Core\Request::METHOD_GET, '/getStatistics', MainController::class, 'getStatistics')
+        ->addRoute(Core\Request::METHOD_POST, '/getStatistics', MainController::class, 'getStatistics')
         ->resolve();
 } catch (Exception $e) {
     return http_response_code(404);

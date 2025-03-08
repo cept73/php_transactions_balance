@@ -13,7 +13,7 @@
 </head>
 <body>
 <h1>User transactions information</h1>
-<form action="/" method="get">
+<form action="/getStatistics" method="get">
     <label for="user">Select user:</label>
     <select name="user" id="user">
         <?php foreach ($users as $id => $name) : ?>
