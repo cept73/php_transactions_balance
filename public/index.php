@@ -1,51 +1,23 @@
 <?php
 
-include_once('db.php');
-include_once('model.php');
-include_once('test.php');
+use App\Controllers\MainController;
+use App\Core;
 
-$conn = get_connect();
+/** Debug */
+ini_set('display_errors', true);
+ini_set('display_startup_errors', true);
+error_reporting(E_ALL);
 
-// Uncomment to see data in db
-//run_db_test($conn);
+require('../vendor/autoload.php');
 
-$month_names = [
-    '01' => 'January',
-    '02' => 'Februarry',
-    '03' => 'March'
-];
-?>
-
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User transactions information</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-<h1>User transactions information</h1>
-<form action="data.php" method="get">
-    <label for="user">Select user:</label>
-    <select name="user" id="user">
-        <?php
-        $users = get_users($conn);
-        foreach ($users as $id => $name) {
-            echo "<option value=\"$id\">".$name."</option>";
-        }
-        ?>
-    </select>
-    <input id="submit" type="submit" value="Show">
-</form>
-
-<div id="data">
-    <h2>Transactions of `User name`</h2>
-    <table>
-        <tr><th>Mounth</th><th>Amount</th><th>Count</th></tr>
-        <tr><td>...</td><td>...</td><td>...</td>
-    </table>
-</div>
-<script src="script.js"></script>
-</body>
-</html>
+try {
+    (new Core\App())
+        ->connectDb('sqlite:../data/database.sqlite')
+        ->addRoute(Core\Request::METHOD_GET, '/', MainController::class, 'index')
+        ->addRoute(Core\Request::METHOD_POST, '/', MainController::class, 'getTransactions')
+        // TODO: Need to tune up server-side pretty-urls first. Removed for simplicity.
+        // ->addRoute(Core\Request::METHOD_GET, '/getStatistics', MainController::class, 'getStatistics')
+        ->resolve();
+} catch (Exception $e) {
+    return http_response_code(404);
+}

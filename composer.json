@@ -1,12 +1,19 @@
 {
   "version": "1.0.0",
   "require": {
-    "php": ">=7.3"
+    "php": ">=7.3",
+    "ext-pdo": "*",
+    "ext-json": "*"
   },
   "require-dev": {
     "composer/composer": "^1.8"
   },
   "config": {
     "cache-dir": ".cache/composer/"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
   }
 }

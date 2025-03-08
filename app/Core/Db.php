@@ -1,11 +1,17 @@
 <?php
 
-function get_connect() {
-    return new PDO("sqlite:database.sqlite");
-}
+namespace App\Core;
 
-function init_db($conn) {
-    $conn->exec("
+class Db
+{
+    public function getConnect($dsn): \PDO
+    {
+        return new \PDO($dsn);
+    }
+
+    public function initDb(\PDO $conn): void
+    {
+        $conn->exec("
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL
@@ -27,10 +33,10 @@ function init_db($conn) {
         FOREIGN KEY (account_to) REFERENCES user_accounts(id)
     );");
 
-    $conn->exec("DELETE FROM `transactions`");
-    $conn->exec("DELETE FROM `user_accounts`");
-    $conn->exec("DELETE FROM `users`");
-    $conn->exec("
+        $conn->exec("DELETE FROM `transactions`");
+        $conn->exec("DELETE FROM `user_accounts`");
+        $conn->exec("DELETE FROM `users`");
+        $conn->exec("
     INSERT INTO `users` (`id`,`name`)
     VALUES
       (10, 'Alice'),
@@ -72,4 +78,35 @@ function init_db($conn) {
       (16, 11, 10, 100.00, '2024-03-20 12:00:00'),
       (17, 10, 11, 50.00, '2024-03-25 12:00:00');
     ");
+    }
+
+    public function run_db_test(\PDO $conn)
+    {
+        $statement = $conn->query('SELECT * FROM `users`');
+        $users = array();
+        while ($row = $statement->fetch()) {
+            $users[$row['id']] = $row['name'];
+        }
+        print_r('Users data<br/>');
+        print_r($users);
+        print_r('</br>');
+
+        $statement = $conn->query('SELECT * FROM `user_accounts`');
+        $user_accounts = array();
+        while ($row = $statement->fetch()) {
+            $user_accounts[$row['id']] = $row['user_id'];
+        }
+        print_r('User accounts data<br/>');
+        print_r($user_accounts);
+        print_r('</br>');
+
+        $statement = $conn->query('SELECT * FROM `transactions`');
+        $transactions = array();
+        while ($row = $statement->fetch()) {
+            $transactions[$row['id']] = $row['amount'];
+        }
+        print_r('Transactions data<br/>');
+        print_r($transactions);
+        print_r('</br>');
+    }
 }
