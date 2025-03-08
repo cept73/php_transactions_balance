@@ -18,7 +18,7 @@ class MainController extends Controller
      */
     public function index(): ViewResponse
     {
-        $users = (new UserRepository())->getAll();
+        $users = (new UserRepository())->getAllActive();
 
         // Return HTML
         return new ViewResponse('main', [
